@@ -87,6 +87,7 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
    Tão logo os contêineres estejam ativos e rodando sem erros, a sessão do PGAgmin4 estará disponível e acessável pelo navegador no endereço
    http://localhost:5050/
 
+   As credenciais de acesso estão no arquivo =.env= na raiz deste repositório.
+
    [[imgs/pgadmin4.png]]
 
-   As credenciais de acesso estão no arquivo =.env= na raiz deste repositório.
