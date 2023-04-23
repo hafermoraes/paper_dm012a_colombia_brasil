@@ -14,7 +14,11 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
   ├── .env
   ├── .gitignore
   ├── imgs
-  │   └── .placeholder
+  │   ├── age_pyramids
+  │   │   ├── age_pyramid_long.png
+  │   │   └── age_pyramid_wide.png
+  │   ├── pgadmin4.png
+  │   └── rstudio.png
   ├── LICENSE
   ├── pgadmin4.json
   ├── raw
@@ -32,7 +36,7 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
       └── sql
           └── create_db.sql
 
-  6 directories, 17 files
+  7 directories, 20 files
   #+end_example
 
 * Acesso aos dados brutos
@@ -53,18 +57,36 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
     - [[https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_Demographic_Indicators_Medium.zip][Indicadores demográficos]]
 
     
-* Banco de dados (PostgreSQL)
-
-  TODO documentar passos
-  
 * Reproducibilidade das análises, gráficos e tabelas
-
-  TODO documentar passos
   
 ** Ambiente de desenvolvimento (Docker containers)
 
-   TODO documentar criação dos conteineres
+   Para reproduzir as análises localmente, primeiro deve-se executar
 
+   #+begin_src sh :exports code :results silent
+   docker-compose down --volumes
+   #+end_src
+
+   e então
+
+   #+begin_src sh :exports code :results silent
+   docker-compose up
+   #+end_src
+  
 ** RStudio
 
-   TODO documentar códigos do R
+   Tão logo os contêineres estejam ativos e rodando sem erros, a sessão do Rstudio estará disponível e acessável pelo navegador no endereço
+   http://localhost:8787/
+
+   As credenciais de acesso estão no arquivo =.env= na raiz deste repositório.
+   
+   [[imgs/rstudio.png]]
+
+** Banco de dados (PostgreSQL)
+
+   Tão logo os contêineres estejam ativos e rodando sem erros, a sessão do PGAgmin4 estará disponível e acessável pelo navegador no endereço
+   http://localhost:5050/
+
+   [[imgs/pgadmin4.png]]
+
+   As credenciais de acesso estão no arquivo =.env= na raiz deste repositório.
