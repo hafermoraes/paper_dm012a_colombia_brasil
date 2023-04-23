@@ -27,28 +27,30 @@ services:
         source: ./src/sql/create_db.sql
         target: /docker-entrypoint-initdb.d/schema.sql
 
-  # rstudio:
-  #   image: "rocker/tidyverse:4.2.1"
-  #   container_name: wpp_rstudio
-  #   restart: always
-  #   depends_on:
-  #     - "db"
-  #   environment:  # reads from local .env file
-  #     - USER=${RSTD_USER}
-  #     - PASSWORD=${RSTD_PASS}
-  #     - PG_HOST=${PG_HOST}
-  #     - PG_DB=${PG_DB}
-  #     - PG_PORT=${PG_PORT}
-  #     - PG_USER=${PG_USER}
-  #     - PG_PASSWORD=${PG_PASSWORD}
-  #   build:
-  #     context: ./ETL
-  #     dockerfile: Dockerfile_RStudio
-  #     network: host
-  #   ports:
-  #     - "8787:8787"
-  #   volumes:
-  #     - ./analyses/:/home/rstudio/
+  rstudio:
+    image: "rocker/tidyverse:4.2.1"
+    container_name: wpp_rstudio
+    restart: always
+    depends_on:
+      - "db"
+    environment:  # reads from local .env file
+      - USER=${RSTD_USER}
+      - PASSWORD=${RSTD_PASS}
+      - PG_HOST=${PG_HOST}
+      - PG_DB=${PG_DB}
+      - PG_PORT=${PG_PORT}
+      - PG_USER=${PG_USER}
+      - PG_PASSWORD=${PG_PASSWORD}
+    build:
+      context: ./src/R/
+      dockerfile: Dockerfile_RStudio
+      network: host
+    ports:
+      - "8787:8787"
+    volumes:
+      - type: bind
+        source: ./src/R/
+        target: /home/rstudio/
       
   pgadmin:
     image: "dpage/pgadmin4"
