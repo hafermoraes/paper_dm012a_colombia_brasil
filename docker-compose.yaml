@@ -1,7 +1,10 @@
 # on the terminal, type
-# docker-compose up --force-recreate --build
-# and
-# Open the web-browser and access
+#
+#   docker-compose down --volumes
+#   docker-compose up --force-recreate --build
+#
+# and open the web-browser and access
+#
 # http://localhost:8787/ for RStudio or
 # http://localhost:5050/ for PGAdmin4
 
