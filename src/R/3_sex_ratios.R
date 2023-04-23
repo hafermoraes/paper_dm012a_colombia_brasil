@@ -44,7 +44,8 @@ order by 1,2
 "
 raw_wide <- dbGetQuery( conn, statement = sql_query )
 
-raw_wide %>% 
+## base dataframe for graphs
+sr_base <- raw_wide %>% 
   mutate(
     agegrp = factor( 
       agegrp,
@@ -55,4 +56,58 @@ raw_wide %>%
                  '80+')
       ),
     male_to_female_ratio = male / female
-  ) %>% View
+  ) 
+
+## razão de sexos ao nascer
+sr_at_birth_facet <- sr_base %>% 
+  filter( agegrp == '0') %>%
+  ggplot(
+    aes( 
+      x = year,
+      y = male_to_female_ratio * 100,
+      color = iso3_code
+      )
+  ) + 
+  geom_point() + 
+  geom_line() +
+  guides(color = guide_legend(reverse=TRUE)) +
+  labs(
+    x = 'ano',
+    y = 'razão de sexos ao nascer',
+    color = '',
+    caption = 'United Nations, Department of Economic and Social Affairs, Population Division (2022). World Population Prospects 2022, Online Edition.'
+  ) + 
+  theme(
+    legend.position = 'top'
+  )
+
+sr_at_birth_facet + 
+  ggsave( filename = "imgs/sex_ratios/sr_at_birth.png", width = 9, height = 5)
+
+## razão de sexos por grupo etário
+sr_facet_agegrp <- sr_base %>% 
+  na.omit() %>%
+  ggplot(
+    aes( 
+      x = year,
+      y = male_to_female_ratio * 100,
+      color = iso3_code
+    )
+  ) + 
+  geom_point() + 
+  geom_line() +
+  guides(color = guide_legend(reverse=TRUE)) +
+  labs(
+    x = 'ano',
+    y = 'razão de sexos ao nascer',
+    color = '',
+    caption = 'United Nations, Department of Economic and Social Affairs, Population Division (2022). World Population Prospects 2022, Online Edition.'
+  ) + 
+  facet_wrap(~agegrp, scales = 'free_y') + 
+  theme(
+    legend.position = 'top'
+  )
+
+sr_facet_agegrp + 
+  ggsave( filename = "imgs/sex_ratios/sr_facet_agegrp.png", width = 10, height = 8)
+
