@@ -1,9 +1,8 @@
 
-library(tidyverse)
 library(DBI)
 library(RPostgres)
 
-# Connect to database 'paa'
+# Connect to database 'wpp'
 conn <- dbConnect(
   RPostgres::Postgres(),
   dbname = Sys.getenv("PG_DB"),
@@ -13,4 +12,3 @@ conn <- dbConnect(
   password = Sys.getenv("PG_PASSWORD")
 )
 
-dbGetQuery( conn, statement = "select * from wpp2022.life_tables limit 5;" )
