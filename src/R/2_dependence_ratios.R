@@ -12,17 +12,56 @@ sql_query <- "
   select iso3_code,
          midperiod as year,
          case
-           when agegrpstart < 15 then 'infant'
-           when agegrpstart < 60 then 'economically_active'
-           else 'elderly'
+           when agegrpstart < 15 then '0-14'
+           when agegrpstart < 60 then '15-59'
+           else '60+'
          end as pop_type,
          sum(poptotal) as pop_total
     from wpp2022.population
    where variant = 'Medium'
      and iso3_code in ('COL','BRA')
      and midperiod in (1960,1970,1980,1990,2000,2010,2020)
+     -- and midperiod between 1960 and 2020
 group by 1,2,3
 order by 1, 2
     ;
 "
-raw_wide <- dbGetQuery( conn, statement = sql_query )
+raw_long <- dbGetQuery( conn, statement = sql_query )
+
+## converte para formato 'wide' e calcula razões de dependência
+raw_wide <- raw_long %>%
+  pivot_wider( 
+    id_cols = 1:2,
+    names_from = pop_type,
+    values_from = pop_total
+    ) %>% 
+  mutate(
+    total = (`0-14` + `60+`) / `15-59`,
+    jovens = `0-14` / `15-59`,
+    idosos = `60+` / `15-59`
+  )
+
+## novamente no formato longo para basear os gráficos
+raw_wide %>%
+  select( -c(`0-14`,`15-59`,`60+`)) %>% 
+  pivot_longer( cols = -(1:2)) %>% 
+  ggplot(
+    aes( 
+      x = year,
+      y = value,
+      color = name, group = name
+    )
+  ) + 
+  geom_point() + 
+  geom_line() + 
+  labs(
+    y = 'Razão de dependência',
+    x = 'ano',
+    color = '',
+    group = '',
+    caption = 'United Nations, Department of Economic and Social Affairs, Population Division (2022). World Population Prospects 2022, Online Edition.'
+  ) + 
+  facet_grid(~iso3_code) + 
+  theme(
+    legend.position = 'top'
+  )
