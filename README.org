@@ -1,5 +1,38 @@
 Repositório dos scripts de obtenção, preparação e disponibilização das análises exploratórias e demográficas do artigo base para o trabalho final da disciplina DM012A - Questões Demográficas Atuais do Doutorado em Demografia (coorte 2023) do Instituto de Filosofia e Ciências Humanas (IFCH) da Universidade Estadual de Campinas (Unicamp).
  
+* Estrutura do repositório
+  #+begin_src shell :export both :results verbatim
+  tree -a -I .git
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  .
+  ├── data
+  │   └── .placeholder
+  ├── docker-compose.yaml
+  ├── .env
+  ├── .gitignore
+  ├── imgs
+  │   └── .placeholder
+  ├── LICENSE
+  ├── pgadmin4.json
+  ├── raw
+  │   ├── WPP2022_Demographic_Indicators_Medium.csv
+  │   ├── WPP2022_Fertility_by_Age5.csv
+  │   └── WPP2022_Life_Table_Abridged_Medium_1950-2021.csv
+  ├── .#README.org -> rmoraes@SAMPLENT012.934873:1681502360
+  ├── README.org
+  └── src
+      ├── R
+      │   ├── Dockerfile_RStudio
+      │   └── textos_nepo.R
+      └── sql
+          └── create_db.sql
+
+  6 directories, 15 files
+  #+end_example
+
 * Acesso aos dados brutos
 
   Os dados utilizados neste artigo acadêmico (e acessados em 23.04.2023) são provenientes das seguintes fontes
@@ -24,4 +57,8 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
   
 ** Ambiente de desenvolvimento (Docker containers)
 
+   TODO documentar criação dos conteineres
+
 ** RStudio
+
+   TODO documentar códigos do R
