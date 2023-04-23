@@ -73,10 +73,10 @@ pyramid_plot_base <- pyramid_data %>% # https://www.statology.org/population-pyr
 ## pirâmides em matriz 'longa' ( linha: anos, coluna: país )
 pyramid_plot_base + 
   facet_grid(year ~ iso3_code) +
-  ggsave( filename = 'age_pyramid_long.png', width = 10, height = 20)
+  ggsave( filename = 'imgs/age_pyramids/age_pyramid_long.png', width = 10, height = 20)
 
 ## pirâmides em matriz 'larga' ( linha: país, coluna: anos )
 pyramid_plot_base + 
   facet_grid(iso3_code ~ year) +
-  ggsave( filename = 'imgs/age_pyramid_wide.png', width = 15, height = 7)
+  ggsave( filename = 'imgs/age_pyramids/age_pyramid_wide.png', width = 15, height = 7)
 
