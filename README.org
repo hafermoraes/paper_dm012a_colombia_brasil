@@ -2,7 +2,7 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
  
 * Estrutura do repositório
   #+begin_src sh :exports both :results verbatim
-  tree -a -I .git
+  tree -a -I '.git|.config|.local'
   #+end_src
 
   #+RESULTS:
@@ -17,8 +17,14 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
   │   ├── age_pyramids
   │   │   ├── age_pyramid_long.png
   │   │   └── age_pyramid_wide.png
+  │   ├── dependence_ratios
+  │   │   ├── dr_facet_iso3code.png
+  │   │   └── dr_facet_poptype.png
   │   ├── pgadmin4.png
-  │   └── rstudio.png
+  │   ├── rstudio.png
+  │   └── sex_ratios
+  │       ├── sr_at_birth.png
+  │       └── sr_facet_agegrp.png
   ├── LICENSE
   ├── pgadmin4.json
   ├── raw
@@ -32,11 +38,13 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
       ├── R
       │   ├── 0_connect_to_db.R
       │   ├── 1_age_pyramids.R
+      │   ├── 2_dependence_ratios.R
+      │   ├── 3_sex_ratios.R
       │   └── Dockerfile_RStudio
       └── sql
           └── create_db.sql
 
-  7 directories, 20 files
+  9 directories, 26 files
   #+end_example
 
 * Acesso aos dados brutos
