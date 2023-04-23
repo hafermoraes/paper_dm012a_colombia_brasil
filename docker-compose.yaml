@@ -52,7 +52,7 @@ services:
       - "8787:8787"
     volumes:
       - type: bind
-        source: ./src
+        source: ./
         target: /home/rstudio/
       
   pgadmin:
