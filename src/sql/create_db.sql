@@ -1,10 +1,7 @@
 \timing
 
---drop database if exists textos_nepo;
---        create database textos_nepo;
-
 -- cria e conecta-se ao banco ~textos_nepo~
-\c textos_nepo;
+\c wpp;
 
 -- cria schema ~wpp2022~ para a versão 2022 dos dados da World Population Prospects
           create schema wpp2022;
@@ -153,9 +150,9 @@
                         px real,
                         lx real,
                         dx real,
-                        lx real,
-                        sx real,
-                        tx real,
+                        uppercase_lx real,
+                        uppercase_sx real,
+                        uppercase_tx real,
                         ex real,
                         ax real
                         );

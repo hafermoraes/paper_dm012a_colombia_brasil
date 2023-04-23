@@ -1,0 +1,65 @@
+# on the terminal, type
+# docker-compose up --force-recreate --build
+# and
+# Open the web-browser and access
+# http://localhost:8787/ for RStudio or
+# http://localhost:5050/ for PGAdmin4
+
+version: "3.4"
+
+services:
+  
+  db:
+    image: "postgres:14.4"
+    container_name: wpp_db
+    restart: always
+    environment:  # reads from local .env file
+      - POSTGRES_DB=${PG_DB}
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - type: bind   # CSV files to be ingested into PostgreSQL databse
+        source: ./raw
+        target: /pg_data
+      - type: bind   # sql script to create schema and tables
+        source: ./src/sql/create_db.sql
+        target: /docker-entrypoint-initdb.d/schema.sql
+
+  # rstudio:
+  #   image: "rocker/tidyverse:4.2.1"
+  #   container_name: wpp_rstudio
+  #   restart: always
+  #   depends_on:
+  #     - "db"
+  #   environment:  # reads from local .env file
+  #     - USER=${RSTD_USER}
+  #     - PASSWORD=${RSTD_PASS}
+  #     - PG_HOST=${PG_HOST}
+  #     - PG_DB=${PG_DB}
+  #     - PG_PORT=${PG_PORT}
+  #     - PG_USER=${PG_USER}
+  #     - PG_PASSWORD=${PG_PASSWORD}
+  #   build:
+  #     context: ./ETL
+  #     dockerfile: Dockerfile_RStudio
+  #     network: host
+  #   ports:
+  #     - "8787:8787"
+  #   volumes:
+  #     - ./analyses/:/home/rstudio/
+      
+  pgadmin:
+    image: "dpage/pgadmin4"
+    container_name: wpp_pgadmin
+    environment: # reads from local .env file
+      - PGADMIN_DEFAULT_EMAIL=${PGAD_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGAD_PASS}
+      - PGADMIN_LISTEN_PORT=${PGAD_PORT}
+    depends_on:
+      - "db"
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./pgadmin4.json:/pgadmin4/servers.json  
