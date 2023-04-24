@@ -22,8 +22,12 @@ order by 1,2,3
 "
 raw_wide <- dbGetQuery( conn, statement = sql_query )
 
-raw_wide %>%
-  pivot_longer(cols = -c(1:3)) %>% View
-  ggplot( aes( x = agegrpstart, y = value, linetype = name)) + 
+raw_wide %>% 
+  pivot_longer(cols = -c(1:3)) %>% 
+  mutate( 
+    agegrpstart = as.numeric(agegrpstart),
+    year = as.factor(year)
+  ) %>% 
+  ggplot( aes( x = agegrpstart, y = value, linetype = year)) + 
   geom_line() + 
-  facet_grid(year ~ iso3_code)
+  facet_grid(name ~ iso3_code, scales = 'free')
