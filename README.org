@@ -23,6 +23,10 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
   │   ├── dependence_ratios
   │   │   ├── dr_facet_iso3code.png
   │   │   └── dr_facet_poptype.png
+  │   ├── fertility
+  │   │   └── fertility_facet_iso3code.png
+  │   ├── life_tables
+  │   │   └── lt_facet_iso3code.png
   │   ├── pgadmin4.png
   │   ├── rstudio.png
   │   └── sex_ratios
@@ -34,6 +38,7 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
   │   ├── WPP2022_Demographic_Indicators_Medium.csv
   │   ├── WPP2022_Fertility_by_Age5.csv
   │   ├── WPP2022_Life_Table_Abridged_Medium_1950-2021.csv
+  │   ├── WPP2022_Life_Table_Complete_Medium_Both_1950-2021.csv
   │   ├── WPP2022_PopulationByAge5GroupSex_Medium.csv
   │   └── WPP2022_PopulationBySingleAgeSex_Medium_1950-2021.csv
   ├── README.org
@@ -44,11 +49,13 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
       │   ├── 2_dependence_ratios.R
       │   ├── 3_sex_ratios.R
       │   ├── 4_demographic_transition.R
+      │   ├── 5_life_tables.R
+      │   ├── 6_fertility.R
       │   └── Dockerfile_RStudio
       └── sql
           └── create_db.sql
 
-  10 directories, 29 files
+  12 directories, 34 files
   #+end_example
 
 * Acesso aos dados brutos
