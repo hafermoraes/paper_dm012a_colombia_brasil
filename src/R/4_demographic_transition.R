@@ -30,8 +30,12 @@ raw_wide %>%
   filter(iso3_code == 'BRA') %>% 
   ggplot( aes(x = year)) + 
   geom_line( aes( y = cdr), lty=1) + 
-  geom_line( aes( y = cbr), lty=2) #+ 
-  #geom_bar( aes( y = pop), stat = 'identity', alpha=0.4, size=0.1)
+  geom_line( aes( y = cbr), lty=2) +
+  geom_bar( aes( y = pop/5000), stat = 'identity', alpha=0.4, size=0.1) + 
+  scale_y_continuous(
+    name = "Taxas por 1.000 (TBF e TBM)", 
+    sec.axis = sec_axis(~.*5, name = "População")
+  )
   
   
              
