@@ -18,7 +18,7 @@ sql_query <- "
    where variant = 'Medium'
      and iso3_code in ('COL','BRA')
      -- and time in (1960,1970,1980,1990,2000,2010,2020)
-     and time between 1950 and 2020
+     and time between 1950 and 2100
 order by 1,2
        ;
 
@@ -26,16 +26,45 @@ order by 1,2
 raw_wide <- dbGetQuery( conn, statement = sql_query )
 
 ## gráfico da transição demográfica
-raw_wide %>%
+## Brasil
+dt_brasil <- raw_wide %>%
   filter(iso3_code == 'BRA') %>% 
   ggplot( aes(x = year)) + 
   geom_line( aes( y = cdr), lty=1) + 
   geom_line( aes( y = cbr), lty=2) +
   geom_bar( aes( y = pop/5000), stat = 'identity', alpha=0.4, size=0.1) + 
+  geom_vline( xintercept = 2022, lty=2, col='red') + 
   scale_y_continuous(
     name = "Taxas por 1.000 (TBF e TBM)", 
-    sec.axis = sec_axis(~.*5, name = "População")
+    sec.axis = sec_axis(~.*5, name = "População (Milhões de pessoas)")
+  ) + 
+  labs(
+    x = 'ano',
+    title = 'Brasil',
+    subtitle = 'Transição demográfica',
+    caption = 'United Nations, Department of Economic and Social Affairs, Population Division (2022). World Population Prospects 2022, Online Edition.'
   )
+
+dt_brasil +
+  ggsave( filename = "imgs/demographic_transition/dt_brasil.png", width = 10, height = 5)  
   
-  
-             
+## Colombia
+dt_colombia <- raw_wide %>%
+  filter(iso3_code == 'COL') %>% 
+  ggplot( aes(x = year)) + 
+  geom_line( aes( y = cdr), lty=1) + 
+  geom_line( aes( y = cbr), lty=2) +
+  geom_bar( aes( y = pop/1000), stat = 'identity', alpha=0.4, size=0.1) + 
+  scale_y_continuous(
+    name = "Taxas por 1.000 (TBF e TBM)", 
+    sec.axis = sec_axis(~.*1, name = "População (Milhões de pessoas)")
+  ) + 
+  labs(
+    x = 'ano',
+    title = 'Colômbia',
+    subtitle = 'Transição demográfica',
+    caption = 'United Nations, Department of Economic and Social Affairs, Population Division (2022). World Population Prospects 2022, Online Edition.'
+  )
+
+dt_colombia +
+  ggsave( filename = "imgs/demographic_transition/dt_colombia.png", width = 10, height = 5)  
