@@ -46,5 +46,5 @@ lt_plot <- raw_wide %>%
   facet_grid(name ~ iso3_code, scales = 'free')
 
 lt_plot + 
-  ggsave( filename = "imgs/life_tables/lt_facet_iso3code.png", width = 7, height = 10)  
+  ggsave( filename = "imgs/life_tables/lt_facet_iso3code.png", width = 11, height = 8)  
 
