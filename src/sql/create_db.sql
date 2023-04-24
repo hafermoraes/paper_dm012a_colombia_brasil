@@ -119,6 +119,52 @@
                  header -- ignora linha de nomes de coluna
                       ; 
 
+
+-- Tábuas de Vida Completas (arquivo ~WPP2022_Life_Table_Complete_Medium_Both_1950-2021.csv~)
+-- drop table if exists wpp2022.lifetables_singleage
+           create table wpp2022.lifetables_singleage (
+                        sortorder integer,
+                        locid integer,
+                        notes varchar(20),
+                        iso3_code varchar(20),
+                        iso2_code varchar(20),
+                        sdmx_code integer,
+                        loctypeid integer,
+                        loctypename varchar(255),
+                        parentid integer,
+                        location varchar(255),
+                        varid integer,
+                        variant varchar(255),
+                        time integer,
+                        midperiod real,
+                        sexid integer,
+                        sex varchar(10),
+                        agegrp varchar(10),
+                        agegrpstart varchar(10),
+                        agegrpspan varchar(10),
+                        mx real,
+                        qx real,
+                        px real,
+                        lx real,
+                        dx real,
+                        uppercase_lx real,
+                        uppercase_sx real,
+                        uppercase_tx real,
+                        ex real,
+                        ax real
+                        );
+
+-- importa tábuas de vida na tabela ~lifetables_singleage~
+-- /pg_data/ existe dentro do docker do postgres!
+                   copy wpp2022.lifetables_singleage
+                   from '/pg_data/WPP2022_Life_Table_Complete_Medium_Both_1950-2021.csv'
+              delimiter ','
+                    csv
+                 header -- ignora linha de nomes de coluna
+                      ; 
+
+
+
 -- Indicadores demográficos (arquivo ~WPP2022_Demographic_Indicators_Medium.csv~)
 -- drop table if exists wpp2022.demographic_indicators
            create table wpp2022.demographic_indicators (
