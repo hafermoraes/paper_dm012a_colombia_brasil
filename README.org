@@ -17,6 +17,9 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
   │   ├── age_pyramids
   │   │   ├── age_pyramid_long.png
   │   │   └── age_pyramid_wide.png
+  │   ├── demographic_transition
+  │   │   ├── dt_brasil.png
+  │   │   └── dt_colombia.png
   │   ├── dependence_ratios
   │   │   ├── dr_facet_iso3code.png
   │   │   └── dr_facet_poptype.png
@@ -40,11 +43,12 @@ Repositório dos scripts de obtenção, preparação e disponibilização das an
       │   ├── 1_age_pyramids.R
       │   ├── 2_dependence_ratios.R
       │   ├── 3_sex_ratios.R
+      │   ├── 4_demographic_transition.R
       │   └── Dockerfile_RStudio
       └── sql
           └── create_db.sql
 
-  9 directories, 26 files
+  10 directories, 29 files
   #+end_example
 
 * Acesso aos dados brutos
