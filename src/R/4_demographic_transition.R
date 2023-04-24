@@ -10,17 +10,26 @@ source('src/R/0_connect_to_db.R')
 ## query the database
 sql_query <- "
   select iso3_code,
-         time,
+         time as year,
          cbr,
          cdr,
          tpopulationmale1july + tpopulationfemale1july as pop
     from wpp2022.demographic_indicators
    where variant = 'Medium'
      and iso3_code in ('COL','BRA')
-     and time in (1960,1970,1980,1990,2000,2010,2020)
-     -- and time between 1960 and 2020
+     -- and time in (1960,1970,1980,1990,2000,2010,2020)
+     and time between 1960 and 2020
 order by 1,2
        ;
 
 "
 raw_wide <- dbGetQuery( conn, statement = sql_query )
+
+## gráfico da transição demográfica
+raw_wide %>%
+  filter(iso3_code == 'BRA') %>% 
+  ggplot() + 
+  geom_line( aes( x = year, y = cdr), lty=1) + 
+  geom_line( aes( x = year, y = cbr), lty=2)
+  
+             
