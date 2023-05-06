@@ -62,3 +62,67 @@ pop_growth_plot <- pop_geom_growth %>%
   
 pop_growth_plot +
   ggsave( filename = "imgs/population_growth/pg_total.png", width = 7, height = 4)
+
+
+## Crescimento (geométrico) populacional por década/país estratificado por jovem/idoso/PIA
+pg_wide_base <- raw_wide %>%
+  rename( type = pop_type, total = pop_total, homens = pop_male, mulheres = pop_female) %>%
+  pivot_longer(cols = c(total,homens, mulheres)) %>%
+  pivot_wider(names_from = year, values_from = value) 
+
+pg_by_age <- pg_wide_base %>% 
+  transmute(
+    iso3_code, type, gender = name,
+    `1960-1970` = (`1970`/`1960`)^(1/10)-1,
+    `1970-1980` = (`1980`/`1970`)^(1/10)-1,
+    `1980-1990` = (`1990`/`1980`)^(1/10)-1,
+    `1990-2000` = (`2000`/`1990`)^(1/10)-1,
+    `2010-2000` = (`2010`/`2000`)^(1/10)-1,
+    `2020-2010` = (`2020`/`2010`)^(1/10)-1
+  )
+
+
+pg_by_age_plot <- pg_by_age %>%
+  pivot_longer(
+    cols = -c('iso3_code','type','gender'), 
+    names_to = 'period',
+    values_to = 'growth'
+  ) %>%
+  filter( gender == 'total') %>%
+  ggplot( aes( x = factor(period), y = growth, group = iso3_code, color = iso3_code)) + 
+  geom_point() + 
+  geom_line() + 
+  guides(color = guide_legend(reverse=TRUE)) +
+  labs(
+    x = 'período',
+    y = 'taxa (geométrica) de crescimento',
+    color = 'país'
+  ) +
+  scale_y_continuous(labels = scales::percent) + 
+  facet_grid( . ~ type )
+
+pg_by_age_plot +
+  ggsave( filename = "imgs/population_growth/pg_by_age.png", width = 16, height = 6)
+
+
+
+pg_by_age_gender_plot <- pg_by_age %>%
+  pivot_longer(
+    cols = -c('iso3_code','type','gender'), 
+    names_to = 'period',
+    values_to = 'growth'
+  ) %>%
+  ggplot( aes( x = factor(period), y = growth, group = iso3_code, color = iso3_code)) + 
+  geom_point() + 
+  geom_line() + 
+  guides(color = guide_legend(reverse=TRUE)) +
+  labs(
+    x = 'período',
+    y = 'taxa (geométrica) de crescimento',
+    color = 'país'
+  ) +
+  scale_y_continuous(labels = scales::percent) + 
+  facet_grid( gender ~ type )
+
+pg_by_age_gender_plot +
+  ggsave( filename = "imgs/population_growth/pg_by_age_and_gender.png", width = 16, height = 8)
