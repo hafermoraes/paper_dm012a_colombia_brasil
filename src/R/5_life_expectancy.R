@@ -51,18 +51,23 @@ e0_var_aux <- ex_dat %>%
   pivot_wider(names_from = iso3_code, values_from = ex)
 
 e0_var_dat <- e0_var_aux %>%
-  left_join( e0_var_dat %>% transmute(year = year-1, BRA_num = BRA, COL_num = COL)) %>%
-  na.omit() %>%
+  left_join( e0_var_aux %>% transmute(year = year-1, BRA_num = BRA, COL_num = COL)) %>%
+  na.omit() %>% 
   transmute( year, BRA = BRA_num/BRA, COL = COL_num/COL) %>%
-  pivot_longer(cols = c(BRA,COL) ) 
+  pivot_longer(cols = c(BRA,COL) ) %>%
+  mutate(value = value-1)
 
 e0_var_plot <- e0_var_dat %>%
   ggplot( aes(x=year, y=value)) + 
   geom_line( aes( color = name)) + 
-  scale_x_continuous(n.breaks = 15) + 
+  scale_y_continuous(labels = scales::percent) + 
+  scale_x_continuous(n.breaks = 15) +
   guides(color = guide_legend(reverse=TRUE)) +
   labs(
     x = 'ano',
     y = 'variação da esperança de vida ao nascer',
     color = 'país',
   )
+
+e0_var_plot + 
+  ggsave( filename = "imgs/life_tables/e0_var_plot.png", width = 7, height = 5)  
