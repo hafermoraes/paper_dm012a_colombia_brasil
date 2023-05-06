@@ -16,8 +16,8 @@ sql_query <- "
            else '60+'
          end as pop_type,
          sum(poptotal) as pop_total,
-		 sum(popmale) as pop_male,
-		 sum(popfemale) as pop_female
+         sum(popmale) as pop_male,
+         sum(popfemale) as pop_female
     from wpp2022.population
    where variant = 'Medium'
      and iso3_code in ('COL','BRA')
