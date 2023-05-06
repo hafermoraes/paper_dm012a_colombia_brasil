@@ -46,4 +46,23 @@ e0_plot +
   ggsave( filename = "imgs/life_tables/e0.png", width = 7, height = 5)  
 
 
+e0_var_aux <- ex_dat %>%
+  filter(age == 0) %>%
+  pivot_wider(names_from = iso3_code, values_from = ex)
 
+e0_var_dat <- e0_var_aux %>%
+  left_join( e0_var_dat %>% transmute(year = year-1, BRA_num = BRA, COL_num = COL)) %>%
+  na.omit() %>%
+  transmute( year, BRA = BRA_num/BRA, COL = COL_num/COL) %>%
+  pivot_longer(cols = c(BRA,COL) ) 
+
+e0_var_plot <- e0_var_dat %>%
+  ggplot( aes(x=year, y=value)) + 
+  geom_line( aes( color = name)) + 
+  scale_x_continuous(n.breaks = 15) + 
+  guides(color = guide_legend(reverse=TRUE)) +
+  labs(
+    x = 'ano',
+    y = 'variação da esperança de vida ao nascer',
+    color = 'país',
+  )
