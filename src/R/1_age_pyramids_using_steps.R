@@ -44,9 +44,7 @@ pyramid_data <- raw_long %>%
   ) %>% 
   mutate(
     year = as.character(year),
-    pop_perc = pop / pop_total,
-    sign_perc = ifelse(test = sex == 'male', yes = -pop_perc, no = pop_perc),
-    sign_pop = ifelse(test = sex == 'male', yes = -pop, no = pop)
+    pop_perc = pop / pop_total
   ) 
 
 ## https://stackoverflow.com/a/37113996
@@ -59,13 +57,13 @@ pyramid_step_thousands <- ggplot( data = pyramid_data, aes( x = age, y = pop, co
   ) + 
   geom_step( 
     data = pyramid_data %>% filter( sex == 'male'),
-    aes(x = age, y=-pop)
+    aes( x = age, y = -pop)
   ) + 
   coord_flip() + 
   labs(
     x = 'idade simples'
     ,y = "População (milhares de pessoas)"
-    ,caption = 'United Nations, Department of Economic and Social Affairs, Population Division (2022). World Population Prospects 2022, Online Edition.'
+    # ,caption = 'United Nations, Department of Economic and Social Affairs, Population Division (2022). World Population Prospects 2022, Online Edition.'
     ,color = 'ano'
   )+ 
   scale_y_continuous(labels = abs) +
@@ -73,8 +71,7 @@ pyramid_step_thousands <- ggplot( data = pyramid_data, aes( x = age, y = pop, co
   facet_wrap( ~ iso3_code, scales = 'free_x', ncol = 1)
 
 pyramid_step_thousands +
-  ggsave( filename = 'imgs/age_pyramids/age_pyramid_step_thousands.png', width = 10, height = 20)
-
+  ggsave( filename = 'imgs/age_pyramids/age_pyramid_step_thousands.png', width = 5, height = 7)
 
 
 ## População (%)
@@ -85,13 +82,13 @@ pyramid_step_pct <- ggplot( data = pyramid_data, aes( x = age, y = pop_perc, col
   ) + 
   geom_step( 
     data = pyramid_data %>% filter( sex == 'male'),
-    aes(x = age, y=-pop_perc)
+    aes( x = age, y = -pop_perc)
   ) + 
   coord_flip() + 
   labs(
     x = 'idade simples'
-    ,y = "População (%)"
-    ,caption = 'United Nations, Department of Economic and Social Affairs, Population Division (2022). World Population Prospects 2022, Online Edition.'
+    ,y = "População (% do total)"
+    # ,caption = 'United Nations, Department of Economic and Social Affairs, Population Division (2022). World Population Prospects 2022, Online Edition.'
     ,color = 'ano'
   )+ 
   scale_y_continuous(labels = abs) +
@@ -99,4 +96,4 @@ pyramid_step_pct <- ggplot( data = pyramid_data, aes( x = age, y = pop_perc, col
   facet_wrap( ~ iso3_code, scales = 'free_x', ncol = 1)
 
 pyramid_step_pct +
-  ggsave( filename = 'imgs/age_pyramids/age_pyramid_step_percent.png', width = 10, height = 20)
+  ggsave( filename = 'imgs/age_pyramids/age_pyramid_step_percent.png', width = 5, height = 7)
