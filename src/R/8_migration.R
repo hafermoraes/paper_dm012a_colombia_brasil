@@ -24,7 +24,6 @@ order by 1,2
 "
 raw_wide <- dbGetQuery( conn, statement = sql_query )
 
-## Migração vs Crescimento natural
 mig_data <- raw_wide %>% 
   select(-c(pop_1jan,natchange, netmigration)) %>% 
   pivot_longer(cols = c(natchange_rate, netmigration_rate)) %>% 
@@ -36,6 +35,22 @@ mig_data <- raw_wide %>%
   ) 
 
 mig_plot <- mig_data %>%
+  filter( name == 'migração líquida') %>%
+  ggplot( aes(x = year, y=value)) + 
+  geom_line( aes(color = iso3_code)) + 
+  labs(
+    x = 'ano',
+    y = 'imigração líquida (por 1.000 pessoas)',
+    color = 'país'
+  ) + 
+  scale_x_continuous(n.breaks = 15)
+
+mig_plot +
+  ggsave( filename = "imgs/migration/mig.png", width = 7, height = 4)
+
+  
+## Migração vs Crescimento natural
+mig_nat_plot <- mig_data %>%
   ggplot( aes( x = year, y = value)) + 
   geom_line( aes( color = iso3_code)) + 
   guides(color = guide_legend(reverse=TRUE)) +
@@ -46,7 +61,7 @@ mig_plot <- mig_data %>%
   ) +
   facet_grid( name ~ ., scales = 'free_y')
 
-mig_plot +
+mig_nat_plot +
   ggsave( filename = "imgs/migration/mig_natchange.png", width = 7, height = 4)
 
 
