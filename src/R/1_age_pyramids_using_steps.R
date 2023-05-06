@@ -1,7 +1,6 @@
 library(dplyr)         # mutate, %>% ,select, filter, transmute, etc...
 library(readr)         # write_csv2
 library(tidyr)         # pivot_wider, pivot_longer
-library(stringr)       # str_detect, str_sub
 library(ggplot2)       # ggplot, geom_line, geom_point, ...
 
 ## to connect postgresql database (saved in 'conn' object)
