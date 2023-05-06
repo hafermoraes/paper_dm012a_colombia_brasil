@@ -59,9 +59,105 @@ mig_nat_plot <- mig_data %>%
     y = 'taxa por 1.000 pessoas',
     color = 'país'
   ) +
+  scale_x_continuous(n.breaks = 15) + 
   facet_grid( name ~ ., scales = 'free_y')
 
 mig_nat_plot +
   ggsave( filename = "imgs/migration/mig_natchange.png", width = 7, height = 4)
 
+## waterfall charts
+wf_data <- raw_wide %>%
+  transmute(
+    iso3_code,
+    period = case_when(
+      year < 1970 ~ '1960-1970',
+      year < 1980 ~ '1970-1980',
+      year < 1990 ~ '1980-1990',
+      year < 2000 ~ '1990-2000',
+      year < 2010 ~ '2000-2010',
+      year < 2020 ~ '2010-2020'
+    ),
+    natchange,
+    netmigration,
+  ) %>% 
+  na.omit() %>%
+  group_by(iso3_code, period) %>%
+  summarise(
+    natchange = sum(natchange),
+    netmigration = sum(netmigration)
+  ) %>%
+  left_join(
+    raw_wide %>% 
+      filter(year == 1960) %>% 
+      transmute(
+        iso3_code,
+        period = '1960-1970', 
+        pop_begin = pop_1jan, 
+        pop_end=0
+      )    
+  ) %>%
+  mutate( 
+    pop_end = pop_begin + natchange + netmigration
+  ) %>%
+  as.data.frame()
+
+for( i in 2:nrow(wf_data)){
+  if( is.na( wf_data[i,'pop_begin'] ) ){
+    wf_data[i,'pop_begin'] <- wf_data[i-1, 'pop_end']
+    wf_data[i,'pop_end'] <- wf_data[i, 'pop_begin'] + wf_data[i, 'natchange'] + wf_data[i, 'netmigration']
+  }
+}  
+
+## validation of pop_end
+raw_wide %>%
+  transmute(
+    iso3_code,
+    period = case_when(
+      year == 1970 ~ '1960-1970',
+      year == 1980 ~ '1970-1980',
+      year == 1990 ~ '1980-1990',
+      year == 2000 ~ '1990-2000',
+      year == 2010 ~ '2000-2010',
+      year == 2020 ~ '2010-2020'
+    ),
+    pop_check = pop_1jan
+  ) %>%
+  na.omit()
+
+wf_data %>%
+  rename( I = pop_begin, CN = natchange, ML = netmigration, F = pop_end) %>%
+  pivot_longer(cols = -c(iso3_code,period)) %>%
+  mutate( 
+    name = factor(name, levels = c('I','CN','ML','F')),
+    period = factor(period)
+  ) %>%
+  ggplot(aes(x=name, fill=name))+
+  geom_rect(aes(x = name, xmin=name-0.5, xmax=name+0.5,ymin=I,ymax=F))
+
+
+wf_data %>%
+  rename( I = pop_begin, CN = natchange, ML = netmigration, F = pop_end) %>%
+  pivot_longer(cols = -c(iso3_code,period)) %>%
+  mutate( 
+    name = factor(name, levels = c('I','CN','ML','F')),
+    period = factor(period)
+  ) %>%
+  ggplot(aes(x=name, fill=name))+
+  geom_rect(aes(x = name, xmin=name-0.5, xmax=name+0.5,ymin=I,ymax=F))
+
+
+# # install.packages('waterfalls')
+# library(waterfalls)
+
+# waterfall(
+#   wf_data %>%
+#     select(-pop_end) %>%
+#     rename( A = pop_begin, B = natchange, C = netmigration) %>%
+#     pivot_longer(cols = -c(iso3_code,period)) %>%
+#     mutate( name = factor( name) ) %>%
+#     filter( iso3_code == 'BRA', period == '2000-2010') %>%
+#     select(-iso3_code, -period) %>%
+#     arrange(name),
+#   calc_total = TRUE
+# )
 
