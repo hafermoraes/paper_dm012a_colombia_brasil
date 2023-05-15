@@ -25,6 +25,20 @@ order by 1,2
 "
 raw_wide <- dbGetQuery( conn, statement = sql_query )
 
+
+raw_wide %>%
+  pivot_longer(
+    cols = c(cbr,cdr,pop)) %>%
+  pivot_wider(
+    id_cols = c(name, year),
+    names_from=iso3_code,
+    values_from=value
+  ) %>%
+  arrange(name,year) %>%
+  write_csv2(
+    './data/demographic_transition.csv'
+  )
+
 ## gráfico da transição demográfica
 ## Brasil
 dt_brasil <- raw_wide %>%
@@ -90,8 +104,8 @@ dt_bra_col <- raw_wide %>%
   ) + 
   labs(
     x = 'ano',
-    fill = "País",
-    color = "País"
+    fill = "",
+    color = ""
   )
 
 dt_bra_col +
