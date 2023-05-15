@@ -1,4 +1,5 @@
 library(dplyr)         # mutate, %>% ,select, filter, transmute, etc...
+library(readr)         # write_csv2
 library(tidyr)         # pivot_wider, pivot_longer
 library(ggplot2)       # ggplot, geom_line, geom_point, ...
 
@@ -48,6 +49,17 @@ mig_plot <- mig_data %>%
 mig_plot +
   ggsave( filename = "imgs/migration/mig.png", width = 7, height = 4)
 
+# dados de migração
+mig_data %>%
+  filter( name == 'migração líquida') %>%
+  pivot_wider(
+    id_cols = c(name,year),
+    names_from = iso3_code,
+    values_from = value
+  ) %>%
+  write_csv2(
+    './data/net_migration.csv'
+  )
   
 ## Migração vs Crescimento natural
 mig_nat_plot <- mig_data %>%

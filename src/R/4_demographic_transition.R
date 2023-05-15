@@ -18,7 +18,7 @@ sql_query <- "
    where variant = 'Medium'
      and iso3_code in ('COL','BRA')
      -- and time in (1960,1970,1980,1990,2000,2010,2020)
-     and time between 1950 and 2100
+     and time between 1950 and 2030
 order by 1,2
        ;
 
@@ -35,7 +35,7 @@ dt_brasil <- raw_wide %>%
   geom_bar( aes( y = pop/5000), stat = 'identity', alpha=0.4, size=0.1) + 
   geom_vline( xintercept = 2022, lty=2, col='red') + 
   scale_y_continuous(
-    name = "Taxas por 1.000 (TBF e TBM)", 
+    name = "Taxas por 1.000 (TBN e TBM)", 
     sec.axis = sec_axis(~.*5, name = "População (Milhões de pessoas)")
   ) + 
   labs(
@@ -55,8 +55,9 @@ dt_colombia <- raw_wide %>%
   geom_line( aes( y = cdr), lty=1) + 
   geom_line( aes( y = cbr), lty=2) +
   geom_bar( aes( y = pop/1000), stat = 'identity', alpha=0.4, size=0.1) + 
+  geom_vline( xintercept = 2022, lty=2, col='red') + 
   scale_y_continuous(
-    name = "Taxas por 1.000 (TBF e TBM)", 
+    name = "Taxas por 1.000 (TBN e TBM)", 
     sec.axis = sec_axis(~.*1, name = "População (Milhões de pessoas)")
   ) + 
   labs(
@@ -68,3 +69,30 @@ dt_colombia <- raw_wide %>%
 
 dt_colombia +
   ggsave( filename = "imgs/demographic_transition/dt_colombia.png", width = 10, height = 5)  
+
+
+## Tudo em um gráfico só...
+dt_bra_col <- raw_wide %>%
+  ggplot( aes(x = year, color = iso3_code)) + 
+  geom_line( aes( y = cdr), lty=1) + 
+  geom_line( aes( y = cbr), lty=5) +
+  geom_bar( 
+    aes(y = pop/5000, fill = iso3_code), 
+    stat = 'identity', 
+    position = position_nudge(), 
+    alpha=0.2, 
+    size=0.08
+  ) + 
+  geom_vline( xintercept = 2022, lty=2, col='black') + 
+  scale_y_continuous(
+    name = "Taxas por 1.000 (TBN e TBM)", 
+    sec.axis = sec_axis(~.*5, name = "População (Milhões de pessoas)")
+  ) + 
+  labs(
+    x = 'ano',
+    fill = "País",
+    color = "País"
+  )
+
+dt_bra_col +
+  ggsave( filename = "imgs/demographic_transition/dt_bra_col.png", width = 10, height = 5)  
