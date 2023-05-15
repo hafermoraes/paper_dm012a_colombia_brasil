@@ -44,7 +44,7 @@ quoc_plot <- raw_long %>%
   scale_x_continuous(n.breaks = 15) + 
   labs(
     x = 'ano',
-    subtitle = 'Quociente COL/BRA da Densidade populacional',
+    #subtitle = 'Quociente COL/BRA da Densidade populacional',
     y = '[Dens.Pop.COL] / [Dens.Pop.BRA]'
   ) 
 
