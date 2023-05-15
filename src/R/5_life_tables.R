@@ -17,8 +17,8 @@ sql_query <- "
     from wpp2022.lifetables_singleage
    where variant = 'Medium'
      and iso3_code in ('COL','BRA')
-     and time in (1960,1970,1980,1990,2000,2010,2020)
-     -- and time in (1960,2020)
+     -- and time in (1960,1970,1980,1990,2000,2010,2020)
+     and time in (1960,2020)
 order by 1,2,3,4
        ;
 "
@@ -36,7 +36,7 @@ lt_plot <- raw_wide %>%
   ) %>% 
   pivot_longer(cols = -c(1:3)) %>% 
   ggplot( aes( x = age, y = value)) + 
-  geom_line(aes(colour = year)) + 
+  geom_line(aes(linetype = year)) + 
   labs(
     x = 'idade',
     y = 'valor da função da tábua de vida',
